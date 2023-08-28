@@ -1,0 +1,45 @@
+[
+    {
+
+        "ID": "1",
+        "Description": "List users without cards",
+        "Query": "SELECT [FirstName], [LastName] FROM [Centaur3Main].[dbo].[Users] WHERE [Users].[UserID] NOT IN (SELECT [UserID] FROM [Centaur3Main].[dbo].[Cards]);",
+        "Params": ["FirstName", "LastName"],
+        "Inputs": []
+    },
+    {
+        "ID": "2",
+        "Description": "List cards unused in the last year",
+        "Query": "SELECT [Users].[LastName], [Users].[FirstName], [Cards].[Description], [Cards].[LastAccessTime] FROM [Centaur3Main].[dbo].[Cards] JOIN [Centaur3Main].[dbo].[Users] ON [Cards].[UserID] = [Users].[UserID] WHERE [Cards].[LastAccessTime] < DATEADD(YEAR, -1, CURRENT_TIMESTAMP);",
+        "Params": ["LastName", "FirstName", "Description", "LastAccessTime"],
+        "Inputs": []
+    },
+    {
+        "ID": "3",
+        "Description": "List Cards by User by Company",
+        "Query": "SELECT [Cards].[Family Number], [Cards].[Card Number],Users.LastName, Users.FirstName, AL1.[Nom] 'Access Level 1', AL2.[Nom] 'Access Level 2' FROM [Users] JOIN [Centaur3Main].[dbo].[Cards] ON [Users].[UserID] = [Cards].[UserID] JOIN [Centaur3Main].[dbo].[Access Levels] AL1 on AL1.[Access Level ID] = [Cards].[Access Level] JOIN [Centaur3Main].[dbo].[Access Levels] AL2 on AL2.[Access Level ID] = [Cards].[Access Level2] WHERE [Company] = {0};",
+        "Params": ["Family Number", "Card Number", "LastName", "FirstName", "Access Level 1", "Access Level 2"],
+        "Inputs": ["Get-CompanyID"]
+    },
+    {
+        "ID": "4",
+        "Description": "List cards by access levels",
+        "Query": "SELECT [Cards].[Family Number], [Cards].[Card Number] AL1.Nom 'AL1_Nom', AL2.Nom 'AL2_Nom' FROM [Centaur3Main].[dbo].[Cards] JOIN [Centaur3Main].[dbo].[Access Levels] AS AL1 ON [Cards].[Access Level] = AL1.[Access Level] JOIN [Centaur3Main].[dbo].[Access Levels] AS AL2 ON [Cards].[Access Level2] = AL2.[Access Level] WHERE [Access Level] = {0} [Access Level2] = {0}",
+        "Params": ["Family Number", "Card Number", "AL1_Nom", "AL2_Nom"],
+        "Inputs": ["Get-AccessLevelID"]
+    },
+    {
+        "ID": "5",
+        "Description": "List cards by floor group",
+        "Query": "SELECT [Cards].[Family Number], [Cards].[Card Number], FG.[Nom] FROM [Centaur3Main].[dbo].[Cards] JOIN [Centaur3Main].[dbo].[Floor Groups] AS FG on [Cards].[Floor Group] = FG.[Floor Group ID] WHERE [Cards].[Floor Group] = {0}",
+        "Params": ["Family Number", "Card Number", "Nom"],
+        "Inputs": ["Get-FloorGroupID"]
+    },
+    {
+        "ID": "6",
+        "Description": "List doors by access level with schedule",
+        "Query": "SELECT [Doors].[Address], [Doors].[Nom] 'Door_Name', S.[Nom] 'Schedule_Name' FROM [Centaur3Main].[dbo].[Doors] JOIN [Centaur3Main].[dbo].[Access Level Data] AS ALD ON [Doors].[Address] = ALD.[Door ID] JOIN [Centaur3Main].[dbo].[Schedules] AS S ON [Doors].[Unlock Schedule] = S.[Schedule ID] WHERE ALD.[Access Level ID] = {0}",
+        "Params": ["Address", "Door_Name", "Schedule_Name"],
+        "Inputs": ["Get-AccessLevelID"]
+    }
+]
