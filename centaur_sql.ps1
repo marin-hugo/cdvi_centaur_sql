@@ -6,6 +6,7 @@ $OUTPUT_FILE = "$HOME\Desktop\$(Get-Date -UFormat %Y%m%dT%H%M%S).tsv"
 # Functions for inputs
 
 function Get-CompanyId {
+  $Params = @('ID', 'Nom')
   $Query = "SELECT [ID], [Nom] FROM [Centaur3Main].[dbo].[Companies] ORDER BY [ID];"
   $results = Invoke-Sqlcmd -ServerInstance $SERVER_INSTANCE -Database $DATABASE -Query $Query
   foreach ($result in $results){
@@ -21,6 +22,7 @@ function Get-CompanyId {
 }
 
 function Get-AccessLevelId {
+  $Params = @('Access Level ID', 'Nom')
   $Query = "SELECT [Access Level ID], [Nom] FROM [Centaur3Main].[dbo].[Access Levels] ORDER BY [Access Level ID];"
   $results = Invoke-Sqlcmd -ServerInstance $SERVER_INSTANCE -Database $DATABASE -Query $Query
   foreach ($result in $results){
@@ -36,6 +38,7 @@ function Get-AccessLevelId {
 }
 
 function Get-FloorGroupId {
+  $Params = @('Floor Group ID', 'Nom')
   $Query = "SELECT [Floor Group ID], [Nom] FROM [Centaur3Main].[dbo].[Floor Groups] ORDER BY [Floor Group ID];"
   $results = Invoke-Sqlcmd -ServerInstance $SERVER_INSTANCE -Database $DATABASE -Query $Query
   foreach ($result in $results){
