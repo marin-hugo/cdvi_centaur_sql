@@ -3,6 +3,56 @@ $SERVER_INSTANCE = "$(hostname)\CDVI"
 $DATABASE = "Centaur3Main"
 $OUTPUT_FILE = "$HOME\Desktop\$(Get-Date -UFormat %Y%m%dT%H%M%S).tsv"
 
+# Functions for inputs
+
+function Get-CompanyId {
+  $Query = "SELECT [ID], [Nom] FROM [Centaur3Main].[dbo].[Companies] ORDER BY [ID];"
+  $results = Invoke-Sqlcmd -ServerInstance $SERVER_INSTANCE -Database $DATABASE -Query $Query
+  foreach ($result in $results){
+    $Display = ""
+    $param_counter = 0
+    foreach ($param in $Params){
+      $Display = $Display + ("{$param_counter}`t" -f $result.$param)
+    }
+    Write-Host $Display
+  }
+  $OptionChoice = Read-Host -Prompt "Choose a company"
+  return $OptionChoice
+}
+
+function Get-AccessLevelId {
+  $Query = "SELECT [Access Level ID], [Nom] FROM [Centaur3Main].[dbo].[Access Levels] ORDER BY [Access Level ID];"
+  $results = Invoke-Sqlcmd -ServerInstance $SERVER_INSTANCE -Database $DATABASE -Query $Query
+  foreach ($result in $results){
+    $Display = ""
+    $param_counter = 0
+    foreach ($param in $Params){
+      $Display = $Display + ("{$param_counter}`t" -f $result.$param)
+    }
+    Write-Host $Display
+  }
+  $OptionChoice = Read-Host -Prompt "Choose an access level"
+  return $OptionChoice
+}
+
+function Get-FloorGroupId {
+  $Query = "SELECT [Floor Group ID], [Nom] FROM [Centaur3Main].[dbo].[Floor Groups] ORDER BY [Floor Group ID];"
+  $results = Invoke-Sqlcmd -ServerInstance $SERVER_INSTANCE -Database $DATABASE -Query $Query
+  foreach ($result in $results){
+    $Display = ""
+    $param_counter = 0
+    foreach ($param in $Params){
+      $Display = $Display + ("{$param_counter}`t" -f $result.$param)
+    }
+    Write-Host $Display
+  }
+  $OptionChoice = Read-Host -Prompt "Choose a floor group"
+  return $OptionChoice
+}
+
+
+# Core program
+
 function Request-Query {
   param ( 
     [String]$Query,
